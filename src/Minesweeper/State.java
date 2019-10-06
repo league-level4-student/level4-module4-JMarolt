@@ -1,5 +1,5 @@
 package Minesweeper;
 
 public enum State {
-	FLAGGED, CHECKED, UNCHECKED
+	FLAGGED, CHECKED, UNCHECKED, BOMB, NULL
 }
