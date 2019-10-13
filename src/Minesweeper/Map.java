@@ -18,8 +18,8 @@ public class Map {
 		
 		for(int i = 0; i < Main.width; i+=20) {
 			for(int k = 0; k < Main.height; k+=20) {
-				if(Main.mouseX >= i && Main.mouseX <= i + 20) {
-					if(Main.mouseY >= k && Main.mouseY <= k + 20) {
+				if(Main.mouseX >= i && Main.mouseX < i + 20) {
+					if(Main.mouseY >= k && Main.mouseY < k + 20) {
 						g.setColor(new Color(0,0,0,50));
 						g.fillRect(i, k, 20, 20);
 					}

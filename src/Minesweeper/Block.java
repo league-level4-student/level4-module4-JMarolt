@@ -3,6 +3,15 @@ package Minesweeper;
 public class Block {
 	
 	private int x, y;
+	private int neighbors;
+	public int getNeighbors() {
+		return neighbors;
+	}
+
+	public void setNeighbors(int neighbors) {
+		this.neighbors = neighbors;
+	}
+
 	public State state;
 	
 	public State getState() {

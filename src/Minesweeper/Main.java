@@ -29,6 +29,8 @@ public class Main implements MouseMotionListener, MouseListener, ActionListener{
 	public static int mouseY;
 	public int mili = (int) System.currentTimeMillis();
 	public int totalTimeTaken = mili%1000;
+	public int totalBombs;
+	public int flagsLeft = totalBombs;
 	Timer timer;
 	
 	public Main() {
@@ -37,11 +39,17 @@ public class Main implements MouseMotionListener, MouseListener, ActionListener{
 		f.setResizable(false);
 		blocks = new Block[width/20][height/20];
 		j = new JPanel() {
-		
-		public void paintComponent(Graphics g) {
-			
+		//draws the map and other drawing functions
+		public void paintComponent(Graphics g) {			
+			for(int i = 0; i < width/20; i++) {
+				for(int k = 0; k < height/20; k++) {
+					if(blocks[i][k].getState().equals(State.FLAGGED)) {
+						g.setColor(Color.red);
+						g.fillRect(blocks[i][k].getX(), blocks[i][k].getY(), 20, 20);
+					}
+				}
+			}
 			map.draw(g);
-			
 		}
 	
 		};
@@ -57,24 +65,135 @@ public class Main implements MouseMotionListener, MouseListener, ActionListener{
 		timer.start();
 		
 	}
-	
-	public void setBlocks() {
-		for(int i = 0; i < width; i+= 20) {
-			for(int k = 0; k < height; k+=20) {
+	//sets the blocks before game starts
+	public void setBlocks() {	
+		for(int i = 0; i < width/20; i++) {
+			for(int k = 0; k < height/20; k++) {
+				blocks[i][k] = new Block(i*20, k*20);
+				blocks[i][k].setX(i);
+				blocks[i][k].setY(k);
+			}
+		}	
+		for(int i = 0; i < width/20; i++) {
+			for(int k = 0; k < height/20; k++) {
 				int next = (int) (Math.random()*5);
 				if(next == 0) {
-					//blocks[i][k].setState(State.BOMB);
-				}else {
-					//blocks[i][k].setState(State.NULL);
+					blocks[i][k].setState(State.BOMB);
+				}else if(next >= 1 && next <= 4){
+					blocks[i][k].setState(State.UNCHECKED);
 				}		
-				//blocks[i][k].setX(i);
-				//blocks[i][k].setY(k);
 			}
 		}
 	}
-	
-	public int getNeighbors(int x, int y) {
-		return 0;
+	//return number of bombs
+	public void getTotalBombs() {
+		for(int i = 0; i < width/20; i++) {
+			for(int k = 0; k < height/20; k++) {
+				if(blocks[i][k].getState().equals(State.BOMB)) {
+					totalBombs++;
+				}
+			}
+		}
+	}
+	//returns the neighbors that are a bomb
+	public int getBombNeighbors(int x, int y) {
+		int num = 0;
+		
+		int ax = x/20;
+		int ay = y/20;
+		
+		if(ax - 1 > 0 && ay - 1 > 0) {
+			if(blocks[ax - 1][ay - 1].getState().equals(State.BOMB)) {
+				num++;
+			}
+		}
+		if(ay - 1 > 0) {
+			if(blocks[ax][ay - 1].getState().equals(State.BOMB)) {
+				num++;
+			}
+		}
+		if(ax + 1 < 26 && ay - 1 > 0) {
+			if(blocks[ax + 1][ay - 1].getState().equals(State.BOMB)) {
+				num++;
+			}
+		}
+		if(ax + 1 < 26) {
+			if(blocks[ax + 1][ay].getState().equals(State.BOMB)) {
+				num++;
+			}
+		}
+		if(ax + 1 < 26 && ay + 1 < 26) {
+			if(blocks[ax + 1][ay + 1].getState().equals(State.BOMB)) {
+				num++;
+			}
+		}
+		if(ay + 1 < 26) {
+			if(blocks[ax][ay + 1].getState().equals(State.BOMB)) {
+				num++;
+			}
+		}
+		if(ax - 1 > 0 && ay + 1 < 26) {
+			if(blocks[ax - 1][ay + 1].getState().equals(State.BOMB)) {
+				num++;
+			}
+		}
+		if(ax - 1 > 0) {
+			if(blocks[ax - 1][ay].getState().equals(State.BOMB)) {
+				num++;
+			}
+		}
+
+		return num;
+	}
+	//returns the neighbors that have 0 bombs around them.
+	public int getNullNeighbors(int x, int y) {
+		int num = 0;
+		
+		int ax = x/20;
+		int ay = y/20;
+		
+		if(ax - 1 > 0 && ay - 1 > 0) {
+			if(blocks[ax - 1][ay - 1].getState().equals(State.NULL)) {
+				num++;
+			}
+		}
+		if(ay - 1 > 0) {
+			if(blocks[ax][ay - 1].getState().equals(State.NULL)) {
+				num++;
+			}
+		}
+		if(ax + 1 < 26 && ay - 1 > 0) {
+			if(blocks[ax + 1][ay - 1].getState().equals(State.NULL)) {
+				num++;
+			}
+		}
+		if(ax + 1 < 26) {
+			if(blocks[ax + 1][ay].getState().equals(State.NULL)) {
+				num++;
+			}
+		}
+		if(ax + 1 < 26 && ay + 1 < 26) {
+			if(blocks[ax + 1][ay + 1].getState().equals(State.NULL)) {
+				num++;
+			}
+		}
+		if(ay + 1 < 26) {
+			if(blocks[ax][ay + 1].getState().equals(State.NULL)) {
+				num++;
+			}
+		}
+		if(ax - 1 > 0 && ay + 1 < 26) {
+			if(blocks[ax - 1][ay + 1].getState().equals(State.NULL)) {
+				num++;
+			}
+		}
+		if(ax - 1 > 0) {
+			if(blocks[ax - 1][ay].getState().equals(State.NULL)) {
+				num++;
+			}
+		}
+
+		return num;
 	}
 	
 	public static void main(String[] args) {
@@ -88,11 +207,55 @@ public class Main implements MouseMotionListener, MouseListener, ActionListener{
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		mouseX = (int) MouseInfo.getPointerInfo().getLocation().getX();
-		mouseY = (int) MouseInfo.getPointerInfo().getLocation().getY() - 45;
+		mouseY = (int) MouseInfo.getPointerInfo().getLocation().getY();
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		mouseX = (int) MouseInfo.getPointerInfo().getLocation().getX();
+		mouseY = (int) MouseInfo.getPointerInfo().getLocation().getY();
+		//check for bomb state when clicked a certain square to determine what program does
+		if(e.getButton() == MouseEvent.BUTTON1) {
+			for(int i = 0; i < width/20; i++) {
+				for(int k = 0; k < height/20; k++) {
+					if(mouseX >= i*20 && mouseX < i*21) {
+						if(mouseY >= k*20 && mouseY < k*21) {
+							if(blocks[i][k].getState().equals(State.BOMB)) {
+								lose();
+							}else if(blocks[i][k].getState().equals(State.NULL)) {
+								
+							}else if(blocks[i][k].getState().equals(State.UNCHECKED)) {
+								blocks[i][k].setNeighbors(getBombNeighbors(i*20,k*20));
+							}
+						}
+					}
+				}
+			}	
+		}
+		//return amount of bombs around the spot
+		if(e.getButton() == MouseEvent.BUTTON3) {
+			for(int i = 0; i < width/20; i++) {
+				for(int k = 0; k < height/20; k++) {
+					if(mouseX >= i*20 && mouseX < i*21) {
+						if(mouseY >= k*20 && mouseY < k*21) {
+							System.out.println(getBombNeighbors(i*20,k*20));
+						}
+					}
+				}
+			}
+		}
+		//flag the spot pressed
+		if(e.getButton() == MouseEvent.BUTTON3) {
+			for(int i = 0; i < width/20; i++) {
+				for(int k = 0; k < height/20; k++) {
+					if(mouseX >= i*20 && mouseX < i*21) {
+						if(mouseY >= k*20 && mouseY < k*21) {
+							blocks[i][k].setState(State.FLAGGED);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -114,8 +277,14 @@ public class Main implements MouseMotionListener, MouseListener, ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		j.repaint();
-		System.out.println("X: " + mouseX);
-		System.out.println("Y: " + mouseY);
+		
+		//System.out.println(flagsLeft);
+		//System.out.println("X: " + mouseX);
+		//System.out.println("Y: " + mouseY);
+		
+	}
+	
+	public void lose() {
 		
 	}
 	
