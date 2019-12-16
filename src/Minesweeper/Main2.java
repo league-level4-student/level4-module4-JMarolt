@@ -16,14 +16,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class Main implements MouseMotionListener, MouseListener, ActionListener{
-	final static int width = 520;
-	final static int height = 520;
+public class Main2 implements MouseMotionListener, MouseListener, ActionListener{
+	public final static int width = 520;
+	public final static int height = 520;
 	final int totalBlocks = 1225;
 	public int amountOfBombs = 245;
 	private JFrame f;
 	private JPanel j;
-	Map map = new Map();
+	Map2 map = new Map2();
 	Block[][] blocks;
 	public static int mouseX;
 	public static int mouseY;
@@ -33,7 +33,7 @@ public class Main implements MouseMotionListener, MouseListener, ActionListener{
 	public int flagsLeft = totalBombs;
 	Timer timer;
 	
-	public Main() {
+	public Main2() {
 		f = new JFrame();
 		f.setTitle("'_'");
 		f.setResizable(false);
@@ -197,7 +197,7 @@ public class Main implements MouseMotionListener, MouseListener, ActionListener{
 	}
 	
 	public static void main(String[] args) {
-		new Main();
+		new Main2();
 	}
 
 	@Override
