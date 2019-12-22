@@ -16,7 +16,7 @@ public class Map {
 				if(Main.mouseX >= i && Main.mouseX < i + 1) {
 					if(Main.mouseY >= k && Main.mouseY < k + 1) {
 						g.setColor(Main.currentColor);
-						g.fillOval(i, k, Main.thickness, Main.thickness);
+						g.fillOval(i - (Main.thickness/2), k - (Main.thickness/2), Main.thickness, Main.thickness);
 					}
 				}
 			}
@@ -24,11 +24,6 @@ public class Map {
 		
 		
 		
-	}
-	
-	public void drawAtLocation(Graphics g, int x, int y) {
-		g.setColor(Main.currentColor);
-		g.fillOval(x, y, Main.thickness, Main.thickness);
 	}
 	
 }
