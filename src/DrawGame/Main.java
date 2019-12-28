@@ -71,7 +71,7 @@ public class Main extends JPanel implements ActionListener, MouseListener, Mouse
 	ArrayList<Circle> circles = new ArrayList<Circle>();
 	public static int seconds = 120;
 	public static int minutes = 2;
-	String time = minutes + ":" + seconds/minutes;
+	// String time = minutes + ":" + seconds/minutes;
 	int millis = 0;
 	Timer timer;
 
@@ -86,16 +86,16 @@ public class Main extends JPanel implements ActionListener, MouseListener, Mouse
 				for (Circle c : circles) {
 					c.paint(g);
 				}
-				if(erase) {
+				if (erase) {
 					eraser.draw(g);
-				}else {
+				} else {
 					map.paint(g);
 				}
 				g.setColor(Color.BLACK);
 				g.drawRect(width - sidePanel + 5, 360, 184, 100);
 				g.setColor(currentColor);
 				g.fillRect(width - sidePanel + 6, 361, 183, 99);
-				
+
 			}
 		};
 		/*
@@ -109,7 +109,7 @@ public class Main extends JPanel implements ActionListener, MouseListener, Mouse
 		blue.setBounds(width - sidePanel + 5, 300, 20, 20);
 		status = new JLabel("Status :" + currentState);
 		status.setBounds(width - sidePanel + 20, 150, 200, 25);
-		timeLeft = new JLabel(time);
+		timeLeft = new JLabel(minutes + ":" + seconds / minutes);
 		timeLeft.setBounds(width - sidePanel + 5, 175, 35, 35);
 		/*
 		 * Thickness JSlider
@@ -182,8 +182,6 @@ public class Main extends JPanel implements ActionListener, MouseListener, Mouse
 		clear.setBounds(550, 100, 50, 50);
 		fill = new JButton("4");
 		fill.setBounds(600, 100, 50, 50);
-		
-		
 
 		f.addMouseMotionListener(this);
 		f.addMouseListener(this);
@@ -203,13 +201,13 @@ public class Main extends JPanel implements ActionListener, MouseListener, Mouse
 		p.add(status);
 		p.add(timeLeft);
 		f.add(p);
-		
+
 		/*
 		 * 
 		 * setting button action listeners
 		 * 
 		 */
-		
+
 		pen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				erase = false;
@@ -243,39 +241,8 @@ public class Main extends JPanel implements ActionListener, MouseListener, Mouse
 		f.pack();
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
-		
-		/*
-		 * 
-		 * WANT: Put all values of the file into an array so it makes it easy to grab an element out of the array and use
-		 * 
-		 */
-		
-		Scanner file = new Scanner("Objects.txt");
-		
-		int random = (int)Math.random() * 4;
-		
-		boolean reached = false;
-		
-		int num = random;
-		
-		while(reached = false) {
-			while(num != 0) {
-				if(file.hasNext() && num == 1) {
-					drawObject = file.next();
-					reached = true;
-				}
-				num--;
-			}
-		}
-		
-		String question = JOptionPane.showInputDialog(drawObject + "/ Do you want to draw this? \nIf you don't, type randomize.");
-		
-		if(question.toLowerCase().equals("randomize")) {
-			random = (int)Math.random() * 4;
-		}
-		
-		System.out.println("Draw: " + drawObject);
-		
+		// randomize();
+
 		System.out.println("1) Marker \n2) Eraser \n3) Erase ALL \n4) Fill");
 
 		/*
@@ -283,7 +250,7 @@ public class Main extends JPanel implements ActionListener, MouseListener, Mouse
 		 * Fix Above
 		 * 
 		 */
-		
+
 		timer.start();
 	}
 
@@ -293,21 +260,23 @@ public class Main extends JPanel implements ActionListener, MouseListener, Mouse
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		if(erase) {
-			for(int i = 0; i < circles.size(); i++) {
-				if((circles.get(i).x >= mouseX - thickness && circles.get(i).x <= mouseX + thickness) && (circles.get(i).y <= mouseY + thickness && circles.get(i).y >= mouseY - thickness)) {
+		if (erase) {
+			for (int i = 0; i < circles.size(); i++) {
+				if ((circles.get(i).x >= mouseX - thickness && circles.get(i).x <= mouseX + thickness)
+						&& (circles.get(i).y <= mouseY + thickness && circles.get(i).y >= mouseY - thickness)) {
 					circles.remove(i);
 				}
 			}
-		}else {
+		} else {
 			if (mouseX < 500) {
 				circles.add(new Circle(e.getX(), e.getY(), thickness, currentColor));
 			}
+			
 		}
 		p.repaint();
 		// these are mac measurements
-		//mouseX = e.getX() - 6;
-		//mouseY = e.getY() - 30;
+		// mouseX = e.getX() - 6;
+		// mouseY = e.getY() - 30;
 		// these are windows measurements
 		mouseX = e.getX();
 		mouseY = e.getY();
@@ -316,8 +285,8 @@ public class Main extends JPanel implements ActionListener, MouseListener, Mouse
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// these are mac measurements
-		//mouseX = e.getX() - 6;
-		//mouseY = e.getY() - 30;
+		// mouseX = e.getX() - 6;
+		// mouseY = e.getY() - 30;
 		// these are windows measurements
 		mouseX = e.getX();
 		mouseY = e.getY();
@@ -330,19 +299,20 @@ public class Main extends JPanel implements ActionListener, MouseListener, Mouse
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if(erase) {
-			for(int i = 0; i < circles.size(); i++) {
-				if((circles.get(i).x >= mouseX - radius && circles.get(i).x <= mouseX + radius) && (circles.get(i).y <= mouseY + radius && circles.get(i).y >= mouseY - radius)) {
+		if (erase) {
+			for (int i = 0; i < circles.size(); i++) {
+				if ((circles.get(i).x >= mouseX - radius && circles.get(i).x <= mouseX + radius)
+						&& (circles.get(i).y <= mouseY + radius && circles.get(i).y >= mouseY - radius)) {
 					circles.remove(i);
 				}
 			}
-		}else {
+		} else {
 			if (mouseX < 500) {
 				circles.add(new Circle(e.getX(), e.getY(), thickness, currentColor));
 			}
 		}
-		if(filling) {
-			circles.add(new Circle(e.getX(), e.getY(), 5000, currentColor));			
+		if (filling) {
+			circles.add(new Circle(e.getX(), e.getY(), 5000, currentColor));
 		}
 		p.repaint();
 	}
@@ -375,35 +345,78 @@ public class Main extends JPanel implements ActionListener, MouseListener, Mouse
 		} else {
 			f.getContentPane().setCursor(getCursor());
 		}
-		
-		if(erase) {
+
+		if (erase) {
 			currentState = State.ERASER;
-		}else if(filling) {
+		} else if (filling) {
 			currentState = State.FILL;
-		}else if(eraseAll){
+		} else if (eraseAll) {
 			currentState = State.ERASE;
-		}else {
+		} else {
 			currentState = State.MARKER;
 		}
-		
+
 		status.setText("Status: " + currentState);
-		
+
 		millis++;
-		
-		if(millis == 1000) {
+		// System.out.println("get here");
+		if (millis == e.ACTION_PERFORMED) {
 			seconds--;
 			millis = 0;
 		}
-		
-		if(seconds == 0 && minutes > 0) {
+
+		if (seconds == 0 && minutes > 0) {
 			minutes--;
 			seconds = 60;
-		}else if(seconds == 0 && minutes == 0){
+		}
+		if (minutes == -1) {
 			System.out.println("times up!");
-		}else {
-			
 		}
 
+		timeLeft.setText(minutes + ":" + seconds / minutes);
+		
+		}
+
+	
+
+	public void randomize() {
+		/*
+		 * 
+		 * WANT: Put all values of the file into an array so it makes it easy to grab an
+		 * element out of the array and use
+		 * 
+		 */
+
+		Scanner file = new Scanner("Objects.txt");
+
+		int random = (int) Math.random() * 4;
+
+		boolean reached = false;
+
+		int num = random;
+
+		System.out.println(file.next());
+
+		while (reached == false) {
+			while (num != 0) {
+				if (file.hasNext()) {
+					num--;
+				}
+				if (num == 1) {
+					reached = true;
+					drawObject = file.next();
+				}
+			}
+		}
+
+		String question = JOptionPane
+				.showInputDialog(drawObject + "/ Do you want to draw this? \nIf you don't, type r.");
+
+		if (question.toLowerCase().equals("r")) {
+			random = (int) Math.random() * 4;
+		}
+
+		System.out.println("Draw: " + drawObject);
 	}
 
 }
