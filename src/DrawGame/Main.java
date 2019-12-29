@@ -86,6 +86,23 @@ public class Main extends JPanel implements ActionListener, MouseListener, Mouse
 				for (Circle c : circles) {
 					c.paint(g);
 				}
+/*
+				if (circles.size() > 2) {
+					for (int i = 0; i < circles.size(); i++) {
+						if (i + 1 < circles.size()) {
+							if ((circles.get(i).x + 1 < circles.get(i + 1).x)
+									|| (circles.get(i).x - 1 > circles.get(i + 1).x)) {
+								if ((circles.get(i).y + 1 < circles.get(i + 1).y)
+										|| (circles.get(i).y - 1 > circles.get(i + 1).y)) {
+									System.out.println("please fix fix fix fix fix fix fix fix fix fix fix fix fix fix fix fix fix fix");
+									drawBetween(circles.get(i), circles.get(i + 1), g);
+								}
+							}
+						}
+					}
+				}
+				*/
+
 				if (erase) {
 					eraser.draw(g);
 				} else {
@@ -271,7 +288,7 @@ public class Main extends JPanel implements ActionListener, MouseListener, Mouse
 			if (mouseX < 500) {
 				circles.add(new Circle(e.getX(), e.getY(), thickness, currentColor));
 			}
-			
+
 		}
 		p.repaint();
 		// these are mac measurements
@@ -374,10 +391,8 @@ public class Main extends JPanel implements ActionListener, MouseListener, Mouse
 		}
 
 		timeLeft.setText(minutes + ":" + seconds / minutes);
-		
-		}
 
-	
+	}
 
 	public void randomize() {
 		/*
@@ -417,6 +432,26 @@ public class Main extends JPanel implements ActionListener, MouseListener, Mouse
 		}
 
 		System.out.println("Draw: " + drawObject);
+	}
+
+	public void drawBetween(Circle a, Circle b, Graphics g) throws ArithmeticException {
+		try {
+			int slope = (a.y - b.y) / (a.x - b.x);
+			int distance = (int) Math.sqrt((a.x - b.x)^2 + (a.y - b.y)^2);
+
+			while (distance != 0) {
+				if (slope != 0) {
+					circles.add(new Circle(a.x + 1, a.y + slope, Main.thickness, currentColor));
+				}
+				if (slope == 0) {
+					circles.add(new Circle(a.x, a.y + 1, Main.thickness, currentColor));
+				}
+				distance--;
+			}
+		} catch (ArithmeticException e) {
+			System.out.println("it failed eilkhd;flkajshf;kjasdhl");
+		}
+
 	}
 
 }
